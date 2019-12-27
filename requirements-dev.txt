@@ -1,3 +1,1 @@
 bumpversion
-pytest==5.*
-pytest-asyncio
