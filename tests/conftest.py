@@ -1,5 +1,3 @@
-import sys
-
 import uplink
 
 import pytest
@@ -31,12 +29,17 @@ class HttpBin(uplink.Consumer):
     def delete(self, p: uplink.Query("param") = None):
         pass
 
-    @uplink.get("delay/5")
-    @uplink.timeout(2)
-    def delay(self, p: uplink.Query("param") = None):
+    @uplink.timeout(1)
+    @uplink.get("delay/2")
+    def timeout(self):
         pass
 
 
 @pytest.fixture
 def client():
     return HttpBin(base_url=BASE_URL, client=HttpxClient())
+
+
+@pytest.fixture
+def data():
+    return {"a": 1, "b": ["test", "foo", 1], "c": "foo"}

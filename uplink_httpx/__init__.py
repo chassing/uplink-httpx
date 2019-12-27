@@ -23,6 +23,7 @@ class HttpxClient(interfaces.HttpClientAdapter):
     exceptions = exceptions.Exceptions()
 
     def __init__(self, session=None, **kwargs):
+        print(kwargs)
         if httpx is None:
             raise NotImplementedError("httpx is not installed.")
         self._auto_created_session = False
@@ -58,3 +59,6 @@ class HttpxClient(interfaces.HttpClientAdapter):
     @staticmethod
     def io():
         return io.AsyncioStrategy()
+
+
+HttpxClient.exceptions.ServerTimeout = httpx.exceptions.ReadTimeout
