@@ -7,6 +7,7 @@ setup(
     version="1.0.0",
     description="HttpX Client for Uplink",
     long_description=Path("README.md").read_text(),
+    long_description_content_type="text/markdown",
     author="Christian Assing",
     author_email="chris@ca-net.org",
     url="https://github.com/chassing/uplink-httpx",
