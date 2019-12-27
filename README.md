@@ -1,5 +1,6 @@
 [![code formatting][black_badge]][black_base]
 [![pypi badge][pypi_badge]][pypi_base]
+![](https://github.com/chassing/uplink-httpx/workflows/Test/badge.svg)
 
 # uplink-httpx
 
