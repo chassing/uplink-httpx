@@ -23,12 +23,11 @@ class HttpxClient(interfaces.HttpClientAdapter):
     exceptions = exceptions.Exceptions()
 
     def __init__(self, session=None, **kwargs):
-        print(kwargs)
         if httpx is None:
             raise NotImplementedError("httpx is not installed.")
         self._auto_created_session = False
         if session is None:
-            session = httpx.Client(**kwargs)
+            session = httpx.AsyncClient(**kwargs)
             self.__auto_created_session = True
         self._session = session
         self._sync_callback_adapter = threaded_callback
@@ -40,7 +39,7 @@ class HttpxClient(interfaces.HttpClientAdapter):
     @staticmethod
     @register.handler
     def with_session(session, *args, **kwargs):
-        if isinstance(session, httpx.Client):
+        if isinstance(session, httpx.AsyncClient):
             return HttpxClient(session, *args, **kwargs)
 
     async def send(self, request):
