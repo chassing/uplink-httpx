@@ -34,7 +34,7 @@ class HttpxClient(interfaces.HttpClientAdapter):
 
     def __del__(self):
         if self._auto_created_session:
-            asyncio.get_event_loop().run_until_complete(self._session.close())
+            asyncio.get_event_loop().run_until_complete(self._session.aclose())
 
     @staticmethod
     @register.handler
@@ -60,4 +60,4 @@ class HttpxClient(interfaces.HttpClientAdapter):
         return io.AsyncioStrategy()
 
 
-HttpxClient.exceptions.ServerTimeout = httpx.exceptions.ReadTimeout
+HttpxClient.exceptions.ServerTimeout = httpx.ReadTimeout
