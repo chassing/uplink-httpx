@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name="uplink-httpx",
-    version="1.1",
+    version="1.2",
     description="HttpX Client for Uplink",
     long_description=Path("README.md").read_text(),
     long_description_content_type="text/markdown",
