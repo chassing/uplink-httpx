@@ -32,7 +32,7 @@ class HttpxClient(interfaces.HttpClientAdapter):
         self._auto_created_session = False
         if session is None:
             session = httpx.AsyncClient(**kwargs)
-            self.__auto_created_session = True
+            self._auto_created_session = True
         self._session = session
         self._sync_callback_adapter = threaded_callback
 
