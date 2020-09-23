@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from uplink.clients import exceptions, interfaces, io, register
 
@@ -6,6 +7,9 @@ try:
     import httpx
 except ImportError:
     httpx = None
+
+
+log = logging.getLogger("uplink.httpx")
 
 
 def threaded_callback(callback):
