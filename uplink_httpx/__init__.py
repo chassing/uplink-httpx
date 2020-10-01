@@ -5,9 +5,10 @@ from uplink.clients import exceptions, interfaces, io, register
 
 try:
     import httpx
+
+    httpx.AsyncClient.__del__ = lambda x: x
 except ImportError:
     httpx = None
-
 
 log = logging.getLogger("uplink.httpx")
 
@@ -38,7 +39,7 @@ class HttpxClient(interfaces.HttpClientAdapter):
 
     def __del__(self):
         if self._auto_created_session:
-            asyncio.get_event_loop().run_until_complete(self._session.aclose())
+            asyncio.get_event_loop().create_task(self._session.aclose())
 
     @staticmethod
     @register.handler
