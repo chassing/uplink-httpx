@@ -39,7 +39,10 @@ class HttpxClient(interfaces.HttpClientAdapter):
 
     def __del__(self):
         if self._auto_created_session:
-            asyncio.get_event_loop().create_task(self._session.aclose())
+            try:
+                asyncio.get_event_loop().create_task(self._session.aclose())
+            except RuntimeError:
+                asyncio.get_event_loop().run_until_complete(self._session.aclose())
 
     @staticmethod
     @register.handler
