@@ -1,12 +1,10 @@
 import asyncio
 import logging
 
-from uplink.clients import exceptions, interfaces, io, register
+from uplink.clients import exceptions, interfaces, io
 
 try:
     import httpx
-
-    httpx.AsyncClient.__del__ = lambda x: x
 except ImportError:
     httpx = None
 
@@ -30,29 +28,15 @@ class HttpxClient(interfaces.HttpClientAdapter):
     def __init__(self, session=None, **kwargs):
         if httpx is None:
             raise NotImplementedError("httpx is not installed.")
-        self._auto_created_session = False
         if session is None:
             session = httpx.AsyncClient(**kwargs)
-            self._auto_created_session = True
         self._session = session
         self._sync_callback_adapter = threaded_callback
 
-    def __del__(self):
-        if self._auto_created_session:
-            try:
-                asyncio.get_event_loop().create_task(self._session.aclose())
-            except RuntimeError:
-                asyncio.get_event_loop().run_until_complete(self._session.aclose())
-
-    @staticmethod
-    @register.handler
-    def with_session(session, *args, **kwargs):
-        if isinstance(session, httpx.AsyncClient):
-            return HttpxClient(session, *args, **kwargs)
-
     async def send(self, request):
         method, url, extras = request
-        response = await self._session.request(method=method, url=url, **extras)
+        async with self._session as session:
+            response = await session.request(method=method, url=url, **extras)
         return response
 
     def wrap_callback(self, callback):
