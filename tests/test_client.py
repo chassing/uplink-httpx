@@ -24,8 +24,24 @@ async def test_get(client, args, expected):
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("args, expected", QUERY_PARAMS)
+async def test_multiple_gets(client, args, expected):
+    assert (await client.get(**args))["args"] == expected
+    assert (await client.get(**args))["args"] == expected
+    assert (await client.get(**args))["args"] == expected
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("args, expected", QUERY_PARAMS)
 async def test_post(client, args, expected, data):
     r = await client.post(body=data, **args)
+    assert r["args"] == expected
+    assert r["json"] == data
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("args, expected", QUERY_PARAMS)
+async def test_patch(client, args, expected, data):
+    r = await client.patch(body=data, **args)
     assert r["args"] == expected
     assert r["json"] == data
 
@@ -49,3 +65,9 @@ async def test_delete(client, args, expected):
 async def test_timeout(client):
     with pytest.raises(HttpxClient.exceptions.ServerTimeout):
         await client.timeout()
+
+
+@pytest.mark.asyncio
+async def test_bad_status_code(client):
+    with pytest.raises(HttpxClient.exceptions.BaseClientException):
+        await client.status_code(400)
