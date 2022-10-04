@@ -34,7 +34,7 @@ class HttpxClient(interfaces.HttpClientAdapter):
         log.debug("HttpxClient: __del__")
         try:
             if not self._session.is_closed:
-                asyncio.create_task(self._session.aclose())
+                asyncio.run(self._session.aclose())
         except RuntimeError:
             pass
 
