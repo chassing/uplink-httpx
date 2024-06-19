@@ -1,2 +1,2 @@
-httpx>=0.12.*
-uplink>=0.9.*
+httpx
+uplink
